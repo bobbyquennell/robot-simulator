@@ -34,4 +34,16 @@ describe('1. A Robot executes:', () => {
       },
     );
   });
+
+  describe('ROTATE', () => {
+    it('when exec LEFT or RIGHT, should rotate 90 degrees without changing position', () => {
+      const sut = new Robot();
+      sut.place(0, 0, 'NORTH');
+      sut.left();
+      expect(sut.position).toEqual({ x: 0, y: 0, facing: 'WEST' } as Position);
+      sut.right();
+      sut.right();
+      expect(sut.position).toEqual({ x: 0, y: 0, facing: 'EAST' } as Position);
+    });
+  });
 });

@@ -17,12 +17,26 @@ export class Robot {
       dimensionY: 5,
     };
   }
+
   #moveForward: Record<Direction, (pos: Position) => Position> = {
     NORTH: (pos: Position) => ({ ...pos, y: pos.y + 1 } as Position),
     SOUTH: (pos: Position) => ({ ...pos, y: pos.y - 1 } as Position),
     WEST: (pos: Position) => ({ ...pos, x: pos.x - 1 } as Position),
     EAST: (pos: Position) => ({ ...pos, x: pos.x + 1 } as Position),
   };
+  #rotateR: Record<Direction, (pos: Position) => Position> = {
+    NORTH: (pos: Position) => ({ ...pos, facing: 'EAST' } as Position),
+    SOUTH: (pos: Position) => ({ ...pos, facing: 'WEST' } as Position),
+    WEST: (pos: Position) => ({ ...pos, facing: 'NORTH' } as Position),
+    EAST: (pos: Position) => ({ ...pos, facing: 'SOUTH' } as Position),
+  };
+  #rotateL: Record<Direction, (pos: Position) => Position> = {
+    NORTH: (pos: Position) => ({ ...pos, facing: 'WEST' } as Position),
+    SOUTH: (pos: Position) => ({ ...pos, facing: 'EAST' } as Position),
+    WEST: (pos: Position) => ({ ...pos, facing: 'SOUTH' } as Position),
+    EAST: (pos: Position) => ({ ...pos, facing: 'NORTH' } as Position),
+  };
+
   place = (x: number, y: number, facing: Direction) => {
     this.#position = {
       x,
@@ -34,5 +48,15 @@ export class Robot {
   move = () => {
     if (!this.#position) return;
     this.#position = this.#moveForward[this.#position.facing](this.#position);
+  };
+  right = () => {
+    if (!this.#position) return;
+    this.#position = this.#rotateR[this.#position.facing](this.#position);
+    return;
+  };
+  left = () => {
+    if (!this.#position) return;
+    this.#position = this.#rotateL[this.#position.facing](this.#position);
+    return;
   };
 }
