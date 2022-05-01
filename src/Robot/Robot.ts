@@ -36,7 +36,14 @@ export class Robot {
     WEST: (pos: Position) => ({ ...pos, facing: 'SOUTH' } as Position),
     EAST: (pos: Position) => ({ ...pos, facing: 'NORTH' } as Position),
   };
-
+  #isOffTable = (x: number, y: number, table: Table) =>
+    x < 0 || x >= table.dimensionX || y < 0 || y >= table.dimensionY
+      ? true
+      : false;
+  #willFall = (pos: Position, table: Table) => {
+    const newPos = this.#moveForward[pos.facing](pos);
+    return this.#isOffTable(newPos.x, newPos.y, table);
+  };
   place = (x: number, y: number, facing: Direction) => {
     this.#position = {
       x,
@@ -47,6 +54,7 @@ export class Robot {
 
   move = () => {
     if (!this.#position) return;
+    if (this.#willFall(this.#position, this.#table)) return;
     this.#position = this.#moveForward[this.#position.facing](this.#position);
   };
   right = () => {

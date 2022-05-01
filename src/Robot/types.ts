@@ -18,3 +18,12 @@ export interface Table {
   dimensionX: number;
   dimensionY: number;
 }
+
+export const Commands = {
+  Place: 'PLACE',
+  Left: 'LEFT',
+  Right: 'RIGHT',
+  Move: 'MOVE',
+  Report: 'REPORT',
+} as const;
+export type Command = typeof Commands[keyof typeof Commands];
