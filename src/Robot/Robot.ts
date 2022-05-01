@@ -45,6 +45,7 @@ export class Robot {
     return this.#isOffTable(newPos.x, newPos.y, table);
   };
   place = (x: number, y: number, facing: Direction) => {
+    console.log('PLACE', x, y, facing);
     this.#position = {
       x,
       y,
@@ -53,22 +54,28 @@ export class Robot {
   };
 
   move = () => {
+    console.log('MOVE');
     if (!this.#position) return;
     if (this.#willFall(this.#position, this.#table)) return;
     this.#position = this.#moveForward[this.#position.facing](this.#position);
   };
   right = () => {
+    console.log('RIGHT');
     if (!this.#position) return;
     this.#position = this.#rotateR[this.#position.facing](this.#position);
     return;
   };
   left = () => {
+    console.log('LEFT');
     if (!this.#position) return;
     this.#position = this.#rotateL[this.#position.facing](this.#position);
     return;
   };
   report = () => {
+    console.log('REPORT');
     if (!this.#position) return;
-    return Object.values(this.#position).join(',');
+    const report = Object.values(this.#position).join(',');
+    console.log(`${report}`);
+    return report;
   };
 }

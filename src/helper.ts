@@ -1,10 +1,10 @@
-import { Robot } from './Robot/Robot';
 import {
+  Robot,
   CmdFunctionType,
   Command,
   Direction,
   PlaceFunctionType,
-} from './Robot/types';
+} from './Robot';
 
 const execCmd: Record<Command, CmdFunctionType> = {
   PLACE: (bot: Robot) => (x: number, y: number, facing: Direction) =>
