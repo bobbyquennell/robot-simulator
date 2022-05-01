@@ -19,10 +19,17 @@ const execCmd: Record<Command, CmdFunctionType> = {
   REPORT: (bot: Robot) => bot.report(),
 };
 
+export const isCommandType = (input: string): input is Command => {
+  return ['PLACE', 'LEFT', 'RIGHT', 'MOVE', 'REPORT'].includes(input);
+};
 export const executeCmds = (cmds: string[], bot: Robot) => {
   for (const cmd of cmds) {
     const cmdTypeAndArgs = cmd.split(',');
     const cmdType = cmdTypeAndArgs[0] as Command;
+    if (!isCommandType(cmdType)) {
+      console.log('invalid cmd:', cmdType);
+      break;
+    }
     if (cmdType !== 'PLACE') {
       execCmd[cmdType](bot);
     } else {
