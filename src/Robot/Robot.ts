@@ -59,4 +59,8 @@ export class Robot {
     this.#position = this.#rotateL[this.#position.facing](this.#position);
     return;
   };
+  report = () => {
+    if (!this.#position) return;
+    return Object.values(this.#position).join(',');
+  };
 }

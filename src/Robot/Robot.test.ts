@@ -46,4 +46,16 @@ describe('1. A Robot executes:', () => {
       expect(sut.position).toEqual({ x: 0, y: 0, facing: 'EAST' } as Position);
     });
   });
+
+  describe('REPORT', () => {
+    it('should return the location and current facing direction', () => {
+      const sut = new Robot();
+      sut.place(0, 0, 'NORTH');
+      expect(sut.report()).toEqual('0,0,NORTH');
+      sut.move();
+      expect(sut.report()).toEqual('0,1,NORTH');
+      sut.right();
+      expect(sut.report()).toEqual('0,1,EAST');
+    });
+  });
 });
