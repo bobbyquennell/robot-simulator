@@ -1,8 +1,16 @@
-export type Direction = 'NORTH' | 'SOUTH' | 'WEST' | 'EAST';
+export const Directions = {
+  North: 'NORTH',
+  South: 'SOUTH',
+  East: 'EAST',
+  West: 'WEST',
+} as const;
+export type Direction = typeof Directions[keyof typeof Directions];
 
-export interface Position {
-  coordinateX: number;
-  coordinateY: number;
+export interface Coordinate {
+  x: number;
+  y: number;
+}
+export interface Position extends Coordinate {
   facing: Direction;
 }
 

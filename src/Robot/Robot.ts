@@ -17,12 +17,22 @@ export class Robot {
       dimensionY: 5,
     };
   }
-
+  #moveForward: Record<Direction, (pos: Position) => Position> = {
+    NORTH: (pos: Position) => ({ ...pos, y: pos.y + 1 } as Position),
+    SOUTH: (pos: Position) => ({ ...pos, y: pos.y - 1 } as Position),
+    WEST: (pos: Position) => ({ ...pos, x: pos.x - 1 } as Position),
+    EAST: (pos: Position) => ({ ...pos, x: pos.x + 1 } as Position),
+  };
   place = (x: number, y: number, facing: Direction) => {
     this.#position = {
-      coordinateX: x,
-      coordinateY: y,
+      x,
+      y,
       facing,
     };
+  };
+
+  move = () => {
+    if (!this.#position) return;
+    this.#position = this.#moveForward[this.#position.facing](this.#position);
   };
 }
