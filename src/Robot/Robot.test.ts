@@ -1,5 +1,6 @@
+import { executeCmds } from '../helper';
 import { Robot } from './Robot';
-import { Command, Direction, Position } from './types';
+import { Direction, Position } from './types';
 
 describe('1. A Robot executes:', () => {
   describe('PLACE', () => {
@@ -61,34 +62,11 @@ describe('1. A Robot executes:', () => {
 });
 
 describe('2. A Robot should prevent falling', () => {
-  type PlaceFunctionType = (x: number, y: number, facing: Direction) => void;
-  const execCmd: Record<Command, (bot: Robot) => unknown> = {
-    PLACE: (bot: Robot) => (x: number, y: number, facing: Direction) =>
-      bot.place(x, y, facing),
-    LEFT: (bot: Robot) => bot.left(),
-
-    RIGHT: (bot: Robot) => bot.right(),
-
-    MOVE: (bot: Robot) => bot.move(),
-
-    REPORT: (bot: Robot) => bot.report(),
-  };
   it.each([[['PLACE, 0,0,NORTH', 'LEFT', 'MOVE'], '0,0,WEST']])(
     'when exec cmds: %s, should ignore dangerous cmds, and stop at final position: %s',
     (cmds, finalPosition) => {
       const sut = new Robot();
-      for (const cmd of cmds) {
-        const cmdTypeAndArgs = cmd.split(',');
-        const cmdType = cmdTypeAndArgs[0] as Command;
-        if (cmdType !== 'PLACE') {
-          execCmd[cmdType](sut);
-        } else {
-          const x = Number.parseInt(cmdTypeAndArgs[1]?.trim());
-          const y = Number.parseInt(cmdTypeAndArgs[2]?.trim());
-          const facing = cmdTypeAndArgs[3]?.trim().toUpperCase() as Direction;
-          (execCmd[cmdType](sut) as PlaceFunctionType)(x, y, facing);
-        }
-      }
+      executeCmds(cmds, sut);
       expect(sut.report()).toEqual(finalPosition);
     },
   );

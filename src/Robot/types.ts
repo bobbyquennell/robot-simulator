@@ -1,3 +1,5 @@
+import { Robot } from './Robot';
+
 export const Directions = {
   North: 'NORTH',
   South: 'SOUTH',
@@ -27,3 +29,10 @@ export const Commands = {
   Report: 'REPORT',
 } as const;
 export type Command = typeof Commands[keyof typeof Commands];
+
+export type CmdFunctionType = (bot: Robot) => unknown;
+export type PlaceFunctionType = (
+  x: number,
+  y: number,
+  facing: Direction,
+) => void;
