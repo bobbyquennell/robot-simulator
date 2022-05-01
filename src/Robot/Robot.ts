@@ -1,5 +1,5 @@
 import { isDirectionType, errorMsg } from '../helper';
-import { Direction, Position, Table } from './types';
+import { Direction, Position, RotateCommand, Table } from './types';
 
 export class Robot {
   #position?: Position = undefined;
@@ -25,18 +25,18 @@ export class Robot {
     WEST: (pos: Position) => ({ ...pos, x: pos.x - 1 } as Position),
     EAST: (pos: Position) => ({ ...pos, x: pos.x + 1 } as Position),
   };
-  #rotateR: Record<Direction, (pos: Position) => Position> = {
-    NORTH: (pos: Position) => ({ ...pos, facing: 'EAST' } as Position),
-    SOUTH: (pos: Position) => ({ ...pos, facing: 'WEST' } as Position),
-    WEST: (pos: Position) => ({ ...pos, facing: 'NORTH' } as Position),
-    EAST: (pos: Position) => ({ ...pos, facing: 'SOUTH' } as Position),
-  };
-  #rotateL: Record<Direction, (pos: Position) => Position> = {
-    NORTH: (pos: Position) => ({ ...pos, facing: 'WEST' } as Position),
-    SOUTH: (pos: Position) => ({ ...pos, facing: 'EAST' } as Position),
-    WEST: (pos: Position) => ({ ...pos, facing: 'SOUTH' } as Position),
-    EAST: (pos: Position) => ({ ...pos, facing: 'NORTH' } as Position),
-  };
+
+  #rotate: Record<Direction, (pos: Position, cmd: RotateCommand) => Position> =
+    {
+      NORTH: (pos: Position, cmd) =>
+        ({ ...pos, facing: cmd === 'LEFT' ? 'WEST' : 'EAST' } as Position),
+      SOUTH: (pos: Position, cmd) =>
+        ({ ...pos, facing: cmd === 'LEFT' ? 'EAST' : 'WEST' } as Position),
+      WEST: (pos: Position, cmd) =>
+        ({ ...pos, facing: cmd === 'LEFT' ? 'SOUTH' : 'NORTH' } as Position),
+      EAST: (pos: Position, cmd) =>
+        ({ ...pos, facing: cmd === 'LEFT' ? 'NORTH' : 'SOUTH' } as Position),
+    };
   #isOffTable = (x: number, y: number, table: Table) =>
     x < 0 || x >= table.dimensionX || y < 0 || y >= table.dimensionY
       ? true
@@ -80,22 +80,13 @@ export class Robot {
     this.#position = this.#moveForward[this.#position.facing](this.#position);
     return;
   };
-  right = () => {
-    console.log('RIGHT');
+  rotate = (cmd: RotateCommand) => {
+    console.log(cmd);
     if (!this.#position) {
-      console.log(errorMsg['NotOnTable']('RIGHT'));
+      console.log(errorMsg['NotOnTable'](cmd));
       return;
     }
-    this.#position = this.#rotateR[this.#position.facing](this.#position);
-    return;
-  };
-  left = () => {
-    console.log('LEFT');
-    if (!this.#position) {
-      console.log(errorMsg['NotOnTable']('LEFT'));
-      return;
-    }
-    this.#position = this.#rotateL[this.#position.facing](this.#position);
+    this.#position = this.#rotate[this.#position.facing](this.#position, cmd);
     return;
   };
   report = () => {

@@ -30,6 +30,12 @@ export const Commands = {
 } as const;
 export type Command = typeof Commands[keyof typeof Commands];
 
+export const RotateCommands = {
+  Left: 'LEFT',
+  Right: 'RIGHT',
+} as const;
+export type RotateCommand = typeof RotateCommands[keyof typeof RotateCommands];
+
 export type CmdFunctionType = (bot: Robot) => unknown;
 export type PlaceFunctionType = (
   x: number,

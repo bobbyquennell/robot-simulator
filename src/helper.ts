@@ -10,9 +10,9 @@ import {
 const execCmd: Record<Command, CmdFunctionType> = {
   PLACE: (bot: Robot) => (x: number, y: number, facing: Direction) =>
     bot.place(x, y, facing),
-  LEFT: (bot: Robot) => bot.left(),
+  LEFT: (bot: Robot) => bot.rotate('LEFT'),
 
-  RIGHT: (bot: Robot) => bot.right(),
+  RIGHT: (bot: Robot) => bot.rotate('RIGHT'),
 
   MOVE: (bot: Robot) => bot.move(),
 
