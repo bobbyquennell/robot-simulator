@@ -36,3 +36,9 @@ export type PlaceFunctionType = (
   y: number,
   facing: Direction,
 ) => void;
+
+export const ErrorTypes = {
+  NotOnTable: 'NotOnTable',
+  WillFallOff: 'WillFallOff',
+} as const;
+export type ErrorType = typeof ErrorTypes[keyof typeof ErrorTypes];

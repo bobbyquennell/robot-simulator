@@ -1,3 +1,4 @@
+import { isDirectionType, errorMsg } from '../helper';
 import { Direction, Position, Table } from './types';
 
 export class Robot {
@@ -46,34 +47,63 @@ export class Robot {
   };
   place = (x: number, y: number, facing: Direction) => {
     console.log('PLACE', x, y, facing);
+    if (!Number.isInteger(x) || !Number.isInteger(y)) {
+      console.log(`Invalid arg x:${x}, y:${y}, not integer, ignore PLACE`);
+      return;
+    }
+    if (!isDirectionType(facing)) {
+      console.log(`Invalid arg facing:${facing}, ignore PLACE`);
+      return;
+    }
+    if (this.#isOffTable(x, y, this.#table)) {
+      console.log(`Invalid arg x:${x}, y:${y}, not on the table, ignore PLACE`);
+      return;
+    }
     this.#position = {
       x,
       y,
       facing,
     };
+    return;
   };
 
   move = () => {
     console.log('MOVE');
-    if (!this.#position) return;
-    if (this.#willFall(this.#position, this.#table)) return;
+    if (!this.#position) {
+      console.log(errorMsg['NotOnTable']('MOVE'));
+      return;
+    }
+    if (this.#willFall(this.#position, this.#table)) {
+      console.log(errorMsg['WillFallOff']('MOVE'));
+      return;
+    }
     this.#position = this.#moveForward[this.#position.facing](this.#position);
+    return;
   };
   right = () => {
     console.log('RIGHT');
-    if (!this.#position) return;
+    if (!this.#position) {
+      console.log(errorMsg['NotOnTable']('RIGHT'));
+      return;
+    }
     this.#position = this.#rotateR[this.#position.facing](this.#position);
     return;
   };
   left = () => {
     console.log('LEFT');
-    if (!this.#position) return;
+    if (!this.#position) {
+      console.log(errorMsg['NotOnTable']('LEFT'));
+      return;
+    }
     this.#position = this.#rotateL[this.#position.facing](this.#position);
     return;
   };
   report = () => {
     console.log('REPORT');
-    if (!this.#position) return;
+    if (!this.#position) {
+      console.log(errorMsg['NotOnTable']('REPORT'));
+      return;
+    }
     const report = Object.values(this.#position).join(',');
     console.log(`${report}`);
     return report;

@@ -4,6 +4,7 @@ import {
   Command,
   Direction,
   PlaceFunctionType,
+  ErrorType,
 } from './Robot';
 
 const execCmd: Record<Command, CmdFunctionType> = {
@@ -18,7 +19,7 @@ const execCmd: Record<Command, CmdFunctionType> = {
   REPORT: (bot: Robot) => bot.report(),
 };
 
-export function executeCmds(cmds: string[], bot: Robot) {
+export const executeCmds = (cmds: string[], bot: Robot) => {
   for (const cmd of cmds) {
     const cmdTypeAndArgs = cmd.split(',');
     const cmdType = cmdTypeAndArgs[0] as Command;
@@ -31,4 +32,12 @@ export function executeCmds(cmds: string[], bot: Robot) {
       (execCmd[cmdType](bot) as PlaceFunctionType)(x, y, facing);
     }
   }
-}
+};
+export const isDirectionType = (input: string): input is Direction => {
+  return ['NORTH', 'SOUTH', 'EAST', 'WEST'].includes(input);
+};
+export const errorMsg: Record<ErrorType, (cmd: Command) => string> = {
+  NotOnTable: (cmd: Command) => `Not on the table, ignore command: ${cmd}`,
+  WillFallOff: (cmd: Command) =>
+    `I will fall off the table, ignore command: ${cmd}`,
+};

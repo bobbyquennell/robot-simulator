@@ -17,6 +17,20 @@ describe('1. A Robot executes:', () => {
       sut.place(x, y, facing);
       expect(sut.position).toEqual(expected);
     });
+
+    it.each([
+      [2, 0, 'MELBOURNE', undefined],
+      [10, 0, 'NORTH', undefined],
+      [NaN, NaN, 'NORTH', undefined],
+      [-1, -2, 'NORTH', undefined],
+    ])(
+      'exec invalid PLACE cmd with: x: %d, y: %d, f: %s, should not update its position',
+      (x, y, facing, expected) => {
+        const sut = new Robot();
+        sut.place(x, y, facing as Direction);
+        expect(sut.position).toEqual(expected);
+      },
+    );
   });
 
   describe('MOVE', () => {
